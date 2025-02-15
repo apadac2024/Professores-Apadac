@@ -35,7 +35,7 @@ export default function ProfessorDashboard() {
 
   const adicionarPlano = () => {
     if (aluno && plano && progresso) {
-      setPlanos([...planos, { aluno, plano, progresso, data: new Date().toLocaleDateString() }]);
+      setPlanos([...planos, { aluno, plano, progresso, data:new Date().toLocaleDateString() }]);
       setAluno("");
       setPlano("");
       setProgresso("");
@@ -43,8 +43,7 @@ export default function ProfessorDashboard() {
   };
 
   const gerarRelatorio = () => {
-    const relatorio = planos.map(p => `Aluno: ${p.aluno}\nPlano: ${p.plano}\nProgresso: ${p.progresso}\nData: ${p.data}\n---`).join("\n");
-    alert("Relatório Trimestral:\n" + relatorio);
+onst relatorio = planos.map(p => `Aluno:${p.aluno}\nPlano:${p.plano}\nProgresso: ${p.progresso}\nData:${p.data}\n---`).join("\n");alert("Relatório Trimestral:\n" + relatorio);
   };
 
   if (!loggedIn) {
