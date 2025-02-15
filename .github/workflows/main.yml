@@ -1,0 +1,99 @@
+
+import React, { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+
+export default function ProfessorDashboard() {
+  const [planos, setPlanos] = useState([]);
+  const [aluno, setAluno] = useState("");
+  const [plano, setPlano] = useState("");
+  const [progresso, setProgresso] = useState("");
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [resetMode, setResetMode] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+
+  const handleLogin = () => {
+    if (username === "professor" && password === "senha123") {
+      setLoggedIn(true);
+    } else {
+      alert("Usuário ou senha incorretos!");
+    }
+  };
+
+  const handleResetPassword = () => {
+    if (username === "professor") {
+      alert("Senha redefinida com sucesso!");
+      setResetMode(false);
+    } else {
+      alert("Usuário não encontrado!");
+    }
+  };
+
+  const adicionarPlano = () => {
+    if (aluno && plano && progresso) {
+      setPlanos([...planos, { aluno, plano, progresso, data: new Date().toLocaleDateString() }]);
+      setAluno("");
+      setPlano("");
+      setProgresso("");
+    }
+  };
+
+  const gerarRelatorio = () => {
+    const relatorio = planos.map(p => `Aluno: ${p.aluno}\nPlano: ${p.plano}\nProgresso: ${p.progresso}\nData: ${p.data}\n---`).join("\n");
+    alert("Relatório Trimestral:\n" + relatorio);
+  };
+
+  if (!loggedIn) {
+    return (
+      <div className="p-6 space-y-4">
+        <h1 className="text-2xl font-bold">Login do Professor</h1>
+        <Input placeholder="Usuário" value={username} onChange={(e) => setUsername(e.target.value)} />
+        {!resetMode ? (
+          <>
+            <Input type="password" placeholder="Senha" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <Button onClick={handleLogin}>Entrar</Button>
+            <Button variant="link" onClick={() => setResetMode(true)}>Esqueceu a senha?</Button>
+          </>
+        ) : (
+          <>
+            <Input type="password" placeholder="Nova Senha" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
+            <Button onClick={handleResetPassword}>Redefinir Senha</Button>
+            <Button variant="link" onClick={() => setResetMode(false)}>Voltar ao Login</Button>
+          </>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-6 space-y-6">
+      <h1 className="text-2xl font-bold">Painel do Professor</h1>
+      <Card>
+        <CardContent className="space-y-4">
+          <Input placeholder="Nome do Aluno" value={aluno} onChange={(e) => setAluno(e.target.value)} />
+          <Textarea placeholder="Planejamento" value={plano} onChange={(e) => setPlano(e.target.value)} />
+          <Textarea placeholder="Avanços e Regressões" value={progresso} onChange={(e) => setProgresso(e.target.value)} />
+          <Button onClick={adicionarPlano}>Adicionar Planejamento</Button>
+        </CardContent>
+      </Card>
+      <div className="space-y-4">
+        {planos.map((p, index) => (
+          <Card key={index}>
+            <CardContent>
+              <p><strong>Aluno:</strong> {p.aluno}</p>
+              <p><strong>Plano:</strong> {p.plano}</p>
+              <p><strong>Avanços e Regressões:</strong> {p.progresso}</p>
+              <p><strong>Data:</strong> {p.data}</p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+      <Button onClick={gerarRelatorio} className="w-full">Gerar Relatório Trimestral</Button>
+    </div>
+  );
+}
+
